@@ -1,0 +1,54 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviewer_levels",
+  "info": {
+    "singularName": "reviewer-level",
+    "pluralName": "reviewer-levels",
+    "displayName": "Reviewer Level",
+    "description": "Gamification levels for reviewers based on published review count"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "name_en": {
+      "type": "string",
+      "required": false
+    },
+    "min_reviews": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+    },
+    "icon": {
+      "type": "string",
+      "required": false
+    },
+    "color": {
+      "type": "string",
+      "required": false
+    },
+    "sort_order": {
+      "type": "integer",
+      "required": false,
+      "default": 0
+    },
+    "is_legend": {
+      "type": "boolean",
+      "required": false,
+      "default": false
+    },
+    "badge_label": {
+      "type": "string",
+      "required": false
+    },
+    "badge_label_en": {
+      "type": "string",
+      "required": false
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "spotlights",
+  "info": {
+    "singularName": "spotlight",
+    "pluralName": "spotlights",
+    "displayName": "Spotlight"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "sortOrder": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "kind": "collectionType",
+  "collectionName": "payments",
+  "info": {
+    "singularName": "payment",
+    "pluralName": "payments",
+    "displayName": "Payment",
+    "description": "Manual bank transfer payment records for subscription upgrades"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "plan": {
+      "type": "enumeration",
+      "enum": ["pro", "enterprise"],
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "paymentStatus": {
+      "type": "enumeration",
+      "enum": ["pending", "approved", "rejected"],
+      "default": "pending",
+      "required": true
+    },
+    "proofUrl": {
+      "type": "text",
+      "required": true
+    },
+    "reference": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "text"
+    },
+    "reviewedAt": {
+      "type": "datetime"
+    },
+    "rejectionReason": {
+      "type": "text"
+    }
+  }
+}

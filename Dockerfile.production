@@ -1,0 +1,47 @@
+# STAGE 1: Build the application
+FROM node:20-alpine AS build
+# Installing system dependencies for sharp/image processing
+RUN apk add --no-cache vips-dev g++ make python3
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /opt/app
+COPY package.json package-lock.json ./
+# Install ALL dependencies to allow the build script to run
+RUN npm ci
+
+COPY . .
+# This step is critical to update the Admin UI with your MySQL changes
+RUN npm run build
+
+# STAGE 2: Create the production image
+FROM node:20-alpine
+# vips-dev is often needed for Strapi's image handling (Sharp)
+RUN apk add --no-cache vips-dev mysql-client
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /opt/app
+
+# Corrected COPY syntax: Multiple sources must end with /
+COPY --from=build /opt/app/node_modules/ ./node_modules/
+COPY --from=build /opt/app/build/ ./build/
+COPY --from=build /opt/app/package.json ./package.json
+COPY --from=build /opt/app/src/ ./src/
+COPY --from=build /opt/app/providers/ ./providers/
+COPY --from=build /opt/app/public/ ./public/
+COPY --from=build /opt/app/config/ ./config/
+COPY --from=build /opt/app/database/ ./database/
+
+# Security: Dedicated non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S strapi -u 1001 && \
+    chown -R strapi:nodejs /opt/app
+
+USER strapi
+
+# Expose the Strapi port
+EXPOSE 1337
+
+# Start the application
+CMD ["npm", "run", "start"]

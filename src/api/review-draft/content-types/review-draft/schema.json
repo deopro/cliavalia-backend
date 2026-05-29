@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "review_drafts",
+  "info": {
+    "singularName": "review-draft",
+    "pluralName": "review-drafts",
+    "displayName": "Review Draft",
+    "description": "Saved draft reviews that users can resume later"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": false,
+      "maxLength": 255
+    },
+    "rating": {
+      "type": "integer",
+      "required": false,
+      "min": 0,
+      "max": 5,
+      "default": 0
+    },
+    "reviewText": {
+      "type": "text",
+      "required": false,
+      "maxLength": 4000
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "businessName": {
+      "type": "string",
+      "required": false,
+      "maxLength": 255
+    },
+    "experienceTags": {
+      "type": "json"
+    },
+    "serviceDate": {
+      "type": "string",
+      "required": false,
+      "maxLength": 50
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "email_templates",
+  "info": {
+    "singularName": "email-template",
+    "pluralName": "email-templates",
+    "displayName": "Email Template",
+    "description": "Editable transactional email templates for all platform notifications"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "key": {
+      "type": "string",
+      "required": true
+    },
+    "locale": {
+      "type": "enumeration",
+      "enum": ["pt", "en"],
+      "default": "pt",
+      "required": true
+    },
+    "subject": {
+      "type": "string",
+      "required": true
+    },
+    "htmlBody": {
+      "type": "text",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "availableVariables": {
+      "type": "json"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
+    "senderName": {
+      "type": "string"
+    },
+    "senderEmail": {
+      "type": "string"
+    }
+  }
+}

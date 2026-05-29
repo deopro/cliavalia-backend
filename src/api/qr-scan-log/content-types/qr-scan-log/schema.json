@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "qr_scan_logs",
+  "info": {
+    "singularName": "qr-scan-log",
+    "pluralName": "qr-scan-logs",
+    "displayName": "QR Scan Log"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business"
+    },
+    "scannedAt": {
+      "type": "datetime",
+      "required": true
+    },
+    "userAgent": {
+      "type": "string"
+    },
+    "referer": {
+      "type": "string"
+    }
+  }
+}

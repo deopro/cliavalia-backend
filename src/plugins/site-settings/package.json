@@ -1,0 +1,15 @@
+{
+  "name": "site-settings",
+  "version": "1.0.0",
+  "description": "Site settings management for the Strapi admin panel",
+  "strapi": {
+    "name": "site-settings",
+    "description": "Manage site settings (auth, pricing, plan features) from the Strapi admin panel",
+    "kind": "plugin",
+    "displayName": "Site Settings"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@strapi/strapi": "^5.0.0"
+  }
+}

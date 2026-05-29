@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "guest_sessions",
+  "info": {
+    "singularName": "guest-session",
+    "pluralName": "guest-sessions",
+    "displayName": "Guest Session",
+    "description": "Tracks anonymous guest content access for metered paywall"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "sessionId": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "ipFingerprint": {
+      "type": "string",
+      "required": false
+    },
+    "viewedContentIds": {
+      "type": "json",
+      "required": false
+    },
+    "viewCount": {
+      "type": "integer",
+      "default": 0,
+      "required": true
+    },
+    "lastAccessAt": {
+      "type": "datetime",
+      "required": false
+    }
+  }
+}

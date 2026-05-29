@@ -1,0 +1,51 @@
+{
+  "name": "cliavalia-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A Strapi application",
+  "scripts": {
+    "build": "strapi build",
+    "console": "strapi console",
+    "deploy": "strapi deploy",
+    "dev": "strapi develop",
+    "develop": "strapi develop",
+    "start": "node scripts/start.js",
+    "start:with-admin": "npm run build && npm run start",
+    "strapi": "strapi",
+    "upgrade": "npx @strapi/upgrade latest",
+    "upgrade:dry": "npx @strapi/upgrade latest --dry",
+    "seed:i18n-taxonomies": "node scripts/seed-localized-taxonomies.js"
+  },
+  "dependencies": {
+    "@strapi/plugin-cloud": "^5.9.0",
+    "@strapi/plugin-users-permissions": "^5.33.4",
+    "@strapi/provider-email-nodemailer": "^5.13.0",
+    "@strapi/provider-upload-cloudinary": "^5.13.1",
+    "@strapi/strapi": "^5.33.4",
+    "cloudinary": "^2.10.0",
+    "mysql": "^2.18.1",
+    "mysql2": "3.9.8",
+    "openai": "^6.10.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "sharp": "^0.34.5",
+    "styled-components": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "baseline-browser-mapping": "^2.9.17",
+    "esbuild": "^0.27.2",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x",
+    "npm": ">=6.0.0"
+  },
+  "strapi": {
+    "uuid": "8d0ef7bd-fc9b-4326-8ed4-60a1e3428ce4",
+    "installId": "90621c110ce28b23506c1c3fa8d4f4c2b79e69fefc6c5a7ad040610a60b23755"
+  }
+}

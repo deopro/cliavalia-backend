@@ -1,0 +1,76 @@
+{
+  "kind": "collectionType",
+  "collectionName": "review_reports",
+  "info": {
+    "singularName": "review-report",
+    "pluralName": "review-reports",
+    "displayName": "Review Report",
+    "description": "Consumer reports of reviews (harmful, fake, etc.)"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "review": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::review.review",
+      "required": true,
+      "description": "The reported review"
+    },
+    "reporter": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "required": true,
+      "description": "User who submitted the report"
+    },
+    "reason": {
+      "type": "string",
+      "required": true,
+      "description": "Main reason: harmful_or_illegal, personal_information, advertising, not_genuine"
+    },
+    "subReason": {
+      "type": "string",
+      "required": false,
+      "description": "Sub-category (e.g. hate_speech, terrorism, employee_competitor)"
+    },
+    "highlightedText": {
+      "type": "text",
+      "required": false,
+      "description": "Text selected by reporter for harmful/personal/advertising"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["pending", "analysing", "approved", "rejected"],
+      "default": "pending",
+      "required": true,
+      "description": "Report status"
+    },
+    "reviewedAt": {
+      "type": "datetime",
+      "required": false,
+      "description": "When the report was reviewed"
+    },
+    "reviewedBy": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "required": false,
+      "description": "Admin who reviewed (optional)"
+    },
+    "rejectionReason": {
+      "type": "text",
+      "required": false,
+      "description": "Reason given when rejected"
+    },
+    "evidence": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images", "files"],
+      "description": "Optional evidence files uploaded by the reporter"
+    }
+  }
+}

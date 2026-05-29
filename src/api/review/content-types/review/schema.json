@@ -1,0 +1,188 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reviews",
+  "info": {
+    "singularName": "review",
+    "pluralName": "reviews",
+    "displayName": "Review",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "rating": {
+      "type": "integer",
+      "required": true,
+      "min": 1,
+      "max": 5
+    },
+    "reviewText": {
+      "type": "text",
+      "required": true,
+      "maxLength": 4000,
+      "minLength": 10
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "reviews"
+    },
+    "business": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business.business",
+      "inversedBy": "reviews"
+    },
+    "views": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "viewedBy": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "viewedReviews"
+    },
+    "experienceTags": {
+      "type": "json"
+    },
+    "experiencePhotos": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "videos"
+      ]
+    },
+    "audioReview": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "audios",
+        "videos"
+      ]
+    },
+    "audioTranscription": {
+      "type": "text",
+      "required": false
+    },
+    "is_published": {
+      "type": "boolean",
+      "default": false
+    },
+    "moderation_status": {
+      "type": "string"
+    },
+    "moderation_reason": {
+      "type": "string",
+      "required": false
+    },
+    "appeal_submitted": {
+      "type": "boolean",
+      "default": false
+    },
+    "appeal_message": {
+      "type": "text",
+      "required": false
+    },
+    "appeal_evidence_url": {
+      "type": "string",
+      "required": false
+    },
+    "appeal_status": {
+      "type": "string",
+      "required": false
+    },
+    "appeal_reason": {
+      "type": "text",
+      "required": false
+    },
+    "appeal_reviewed_at": {
+      "type": "datetime",
+      "required": false
+    },
+    "appeal_reviewed_by": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "admin::user",
+      "required": false
+    },
+    "originalLocale": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 10,
+      "default": "pt"
+    },
+    "businessReply": {
+      "type": "text",
+      "maxLength": 2000
+    },
+    "businessReplyDate": {
+      "type": "datetime"
+    },
+    "isRead": {
+      "type": "boolean",
+      "default": false
+    },
+    "reportStatus": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "reviewed",
+        "resolved",
+        "dismissed"
+      ]
+    },
+    "feelingTag": {
+      "type": "string",
+      "maxLength": 100,
+      "required": false
+    },
+    "shareCount": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "originalRating": {
+      "type": "integer",
+      "min": 1,
+      "max": 5,
+      "required": false
+    },
+    "previousRating": {
+      "type": "integer",
+      "min": 1,
+      "max": 5,
+      "required": false
+    },
+    "agency": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::agency.agency",
+      "inversedBy": "reviews"
+    },
+    "awaitingEntityApproval": {
+      "type": "boolean",
+      "default": false
+    },
+    "flag_source": {
+      "type": "string",
+      "required": false
+    },
+    "source": {
+      "type": "enumeration",
+      "enum": ["qr", "direct", "widget", "share"],
+      "required": false
+    }
+  }
+}

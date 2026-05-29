@@ -1,0 +1,123 @@
+services:
+  strapi:
+    container_name: cliavalia-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: "0:0"
+    restart: unless-stopped
+    ports:
+      - "1337:1337"
+      - "5173:5173"
+    env_file:
+      - .env
+    command: npm run develop
+    environment:
+      NODE_ENV: development
+      DATABASE_CLIENT: mysql
+      DATABASE_HOST: cliavalia-db
+      DATABASE_PORT: 3306
+      DATABASE_NAME: cliavalia
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: your_strong_password
+      # Strapi v5 required secrets
+      APP_KEYS: your_app_key_1,your_app_key_2
+      ADMIN_JWT_SECRET: your_admin_jwt_secret_key
+      API_TOKEN_SALT: your_api_token_salt
+      TRANSFER_TOKEN_SALT: your_transfer_token_salt
+      ENCRYPTION_KEY: your_encryption_key
+      # Email (Brevo HTTP API)
+      BREVO_API_KEY: ${BREVO_API_KEY:-}
+      DEFAULT_SENDER_EMAIL: notificacoes@cliavalia.com
+      DEFAULT_REPLY_TO: notificacoes@cliavalia.com
+      # Additional Strapi v5 environment variables
+      HOST: 0.0.0.0
+      PORT: 1337
+      JWT_SECRET: cliavalia_jwt_secret_key_2024_secure_production_ready
+      # Strapi v5 JWT configuration
+      STRAPI_JWT_SECRET: cliavalia_jwt_secret_key_2024_secure_production_ready
+      # Frontend URL for email confirmations
+      FRONTEND_URL: http://localhost:3000
+      # Public URL for OAuth redirects (set SERVER_URL in .env or here)
+      PUBLIC_URL: ${SERVER_URL:-http://localhost:1337}
+      # Cloudinary Configuration
+      # These can be set via .env file or environment variables
+      # If not set, will use placeholder values (upload will fail)
+      CLOUDINARY_NAME: ${CLOUDINARY_NAME:-your_cloudinary_cloud_name}
+      CLOUDINARY_KEY: ${CLOUDINARY_KEY:-your_cloudinary_api_key}
+      CLOUDINARY_SECRET: ${CLOUDINARY_SECRET:-your_cloudinary_api_secret}
+      CLOUDINARY_URL: ${CLOUDINARY_URL:-cloudinary://your_cloudinary_api_key:your_cloudinary_api_secret@your_cloudinary_cloud_name}
+      # OpenAI Configuration for Review Moderation
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    volumes:
+      - ./src:/opt/app/src
+      - ./config:/opt/app/config
+      # Do not mount ./dist so the container uses the image's pre-built admin (dist/build). Mounting ./dist overwrites it and causes "Page not found" after admin login. For backend-only hot reload use a second compose override with command: npm run develop and - ./dist:/opt/app/dist.
+      - strapi-uploads:/opt/app/public/uploads
+      - strapi-tmp:/opt/app/.tmp
+    depends_on:
+      cliavalia-db:
+        condition: service_healthy
+    networks:
+      - cliavalia-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:' + (process.env.PORT || 1337) + '/_health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  cliavalia-db:
+    container_name: cliavalia-db
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: your_strong_password
+      MYSQL_DATABASE: cliavalia
+      MYSQL_USER: strapi
+      MYSQL_PASSWORD: strapi_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    networks:
+      - cliavalia-network
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p$$MYSQL_ROOT_PASSWORD",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    command: --default-authentication-plugin=mysql_native_password --innodb-buffer-pool-size=128M
+
+volumes:
+  mysql-data:
+    name: cliavalia_mysql_data
+    driver: local
+  strapi-uploads:
+    name: cliavalia_strapi_uploads
+    driver: local
+  strapi-tmp:
+    name: cliavalia_strapi_tmp
+    driver: local
+
+networks:
+  cliavalia-network:
+    driver: bridge

@@ -1,0 +1,181 @@
+{
+  "kind": "collectionType",
+  "collectionName": "up_users",
+  "info": {
+    "name": "user",
+    "description": "",
+    "singularName": "user",
+    "pluralName": "users",
+    "displayName": "User"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "username": {
+      "type": "string",
+      "minLength": 3,
+      "unique": true,
+      "configurable": false,
+      "required": true
+    },
+    "email": {
+      "type": "email",
+      "minLength": 6,
+      "configurable": false,
+      "required": true
+    },
+    "provider": {
+      "type": "string",
+      "configurable": false
+    },
+    "password": {
+      "type": "password",
+      "minLength": 6,
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "resetPasswordToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "confirmationToken": {
+      "type": "string",
+      "configurable": false,
+      "private": true,
+      "searchable": false
+    },
+    "confirmationTokenSentAt": {
+      "type": "datetime",
+      "private": true,
+      "required": false
+    },
+    "resetPasswordTokenSentAt": {
+      "type": "datetime",
+      "private": true,
+      "required": false
+    },
+    "confirmed": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "blocked": {
+      "type": "boolean",
+      "default": false,
+      "configurable": false
+    },
+    "role": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.role",
+      "inversedBy": "users",
+      "configurable": false
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "users_permissions_user"
+    },
+    "firstName": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 80,
+      "required": true
+    },
+    "lastName": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 30,
+      "required": true
+    },
+    "viewedReviews": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::review.review",
+      "inversedBy": "viewedBy"
+    },
+    "phoneNumber": {
+      "type": "string",
+      "maxLength": 20,
+      "required": false,
+      "unique": true
+    },
+    "otpCode": {
+      "type": "string",
+      "private": true,
+      "maxLength": 6,
+      "required": false
+    },
+    "otpExpiry": {
+      "type": "datetime",
+      "private": true,
+      "required": false
+    },
+    "profileImage": {
+      "type": "string",
+      "required": false
+    },
+    "coverPhoto": {
+      "type": "string",
+      "required": false
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "province": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::province.province",
+      "inversedBy": "user"
+    },
+    "showProvinceOnPublicProfile": {
+      "type": "boolean",
+      "default": false
+    },
+    "reviewer_level": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::reviewer-level.reviewer-level"
+    },
+    "isDeletionPending": {
+      "type": "boolean",
+      "default": false
+    },
+    "deletionRequestedAt": {
+      "type": "datetime",
+      "required": false
+    },
+    "scheduledDeletionAt": {
+      "type": "datetime",
+      "required": false
+    },
+    "deletionCancelledAt": {
+      "type": "datetime",
+      "required": false
+    },
+    "deletionFinalizedAt": {
+      "type": "datetime",
+      "required": false
+    },
+    "anonymizedAt": {
+      "type": "datetime",
+      "required": false
+    },
+    "pendingDeletionReviewIds": {
+      "type": "json",
+      "required": false
+    },
+    "emailLocale": {
+      "type": "enumeration",
+      "enum": ["pt", "en"],
+      "required": false
+    }
+  }
+}

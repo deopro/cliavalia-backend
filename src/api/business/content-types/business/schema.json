@@ -1,0 +1,200 @@
+{
+  "kind": "collectionType",
+  "collectionName": "businesses",
+  "info": {
+    "singularName": "business",
+    "pluralName": "businesses",
+    "displayName": "Business",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100,
+      "required": true,
+      "unique": true
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "address": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "logoUrl": {
+      "type": "string"
+    },
+    "coverPhoto": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "linkedinUrl": {
+      "type": "string"
+    },
+    "facebookUrl": {
+      "type": "string"
+    },
+    "instagramUrl": {
+      "type": "string"
+    },
+    "tiktokUrl": {
+      "type": "string"
+    },
+    "twitterUrl": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "verified": {
+      "type": "boolean"
+    },
+    "verifiedDocumentType": {
+      "type": "enumeration",
+      "enum": [
+        "business_license",
+        "utility_bill",
+        "tax_filing"
+      ]
+    },
+    "provinces": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::province.province",
+      "inversedBy": "businesses"
+    },
+    "municipalities": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::municipality.municipality",
+      "mappedBy": "business"
+    },
+    "sector": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::sector.sector",
+      "inversedBy": "businesses"
+    },
+    "categories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::category.category",
+      "inversedBy": "businesses"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review",
+      "mappedBy": "business"
+    },
+    "avaliscore": {
+      "type": "decimal",
+      "default": 0,
+      "min": 0,
+      "max": 100
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "owner": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "companySize": {
+      "type": "string",
+      "maxLength": 50,
+      "required": false
+    },
+    "nameUpdateCount": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "hours": {
+      "type": "json"
+    },
+    "NIF": {
+      "type": "biginteger",
+      "unique": true
+    },
+    "companyEmail": {
+      "type": "email",
+      "unique": true
+    },
+    "approvalStatus": {
+      "type": "enumeration",
+      "enum": ["pending", "approved", "rejected"],
+      "default": "pending"
+    },
+    "submittedBy": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "possibleDuplicate": {
+      "type": "boolean",
+      "default": false
+    },
+    "rejectionReason": {
+      "type": "text"
+    },
+    "agencies": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::agency.agency",
+      "mappedBy": "business"
+    },
+    "acronym": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "officialLetter": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "files"]
+    },
+    "idCopy": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "files"]
+    },
+    "gallery": {
+      "type": "json",
+      "default": []
+    },
+    "subscriptionPlan": {
+      "type": "enumeration",
+      "enum": ["free", "trial", "pro", "enterprise"],
+      "default": "free"
+    },
+    "subscriptionStatus": {
+      "type": "enumeration",
+      "enum": ["active", "expired", "cancelled"],
+      "default": "active"
+    },
+    "trialStartedAt": {
+      "type": "datetime"
+    },
+    "trialExpiresAt": {
+      "type": "datetime"
+    },
+    "subscriptionStartedAt": {
+      "type": "datetime"
+    },
+    "subscriptionEndsAt": {
+      "type": "datetime"
+    }
+  }
+}

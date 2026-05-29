@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "review_view_logs",
+  "info": {
+    "singularName": "review-view-log",
+    "pluralName": "review-view-logs",
+    "displayName": "Review View Log"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "review": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::review.review"
+    },
+    "viewer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "viewedAt": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}

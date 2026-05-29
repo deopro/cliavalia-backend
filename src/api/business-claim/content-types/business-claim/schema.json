@@ -1,0 +1,80 @@
+{
+  "kind": "collectionType",
+  "collectionName": "business_claims",
+  "info": {
+    "singularName": "business-claim",
+    "pluralName": "business-claims",
+    "displayName": "Business Claim",
+    "description": "Business ownership claims submitted by users"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "businessName": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100
+    },
+    "businessId": {
+      "type": "string",
+      "required": false
+    },
+    "contactEmail": {
+      "type": "email",
+      "required": true
+    },
+    "documentType": {
+      "type": "enumeration",
+      "enum": ["business_license", "utility_bill", "tax_filing"],
+      "required": false
+    },
+    "licenseFile": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "files"]
+    },
+    "officialLetter": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "files"]
+    },
+    "idCopy": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images", "files"]
+    },
+    "note": {
+      "type": "text",
+      "required": false
+    },
+    "claimStatus": {
+      "type": "enumeration",
+      "enum": ["pending", "approved", "rejected"],
+      "default": "pending",
+      "required": true
+    },
+    "reviewedAt": {
+      "type": "datetime",
+      "required": false
+    },
+    "reviewedBy": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "rejectionReason": {
+      "type": "text",
+      "required": false
+    }
+  }
+}
+
+
+
+
+
