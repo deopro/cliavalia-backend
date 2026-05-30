@@ -4,6 +4,7 @@
 
 import { factories } from "@strapi/strapi";
 import { getBusinessCategoriesPopulate } from "../../../utils/business-categories";
+import { buildPublishedReviewCountWhere } from "../utils/publishedReviewCountWhere";
 
 
 const DIRECT_FLAGGED_STATUSES = new Set(["Sinalizada", "Flagged"]);
@@ -1911,16 +1912,9 @@ export default factories.createCoreController(
       const reactionService = strapi.service("api::review-reaction.review-reaction");
       const reactionsGiven = await reactionService.getReactionsGivenCount(user.id);
 
-      // Count published reviews for user-level gamification (exclude flagged reviews)
+      // Count published reviews for user-level gamification (exclude flagged / pending)
       const reviewCount = await strapi.db.query("api::review.review").count({
-        where: {
-          users_permissions_user: { id: user.id },
-          publishedAt: { $notNull: true },
-          $and: [
-            { moderation_status: { $ne: "Sinalizada" } },
-            { moderation_status: { $ne: "Flagged" } },
-          ],
-        },
+        where: buildPublishedReviewCountWhere(user.id),
       });
 
       // Fetch stored reviewer_level relation (authoritative backend level)
@@ -1964,14 +1958,7 @@ export default factories.createCoreController(
       }
 
       const reviewCount = await strapi.db.query("api::review.review").count({
-        where: {
-          users_permissions_user: { id: resolvedNumericId },
-          publishedAt: { $notNull: true },
-          $and: [
-            { moderation_status: { $ne: "Sinalizada" } },
-            { moderation_status: { $ne: "Flagged" } },
-          ],
-        },
+        where: buildPublishedReviewCountWhere(resolvedNumericId),
       });
 
       // Fetch stored reviewer_level relation (authoritative backend level)

@@ -1,3 +1,5 @@
+import { buildPublishedReviewCountWhere } from "./publishedReviewCountWhere";
+
 /**
  * computeUserLevel — recomputes a user's reviewer level from their current
  * published review count and returns the matching reviewer-level record ID.
@@ -18,14 +20,7 @@ export async function computeUserLevel(
   const reviewCount: number = await strapiInstance.db
     .query("api::review.review")
     .count({
-      where: {
-        users_permissions_user: { id: userId },
-        publishedAt: { $notNull: true },
-        $and: [
-          { moderation_status: { $ne: "Sinalizada" } },
-          { moderation_status: { $ne: "Flagged" } },
-        ],
-      },
+      where: buildPublishedReviewCountWhere(userId),
     });
 
   // 2. Load all configured levels, highest threshold first
