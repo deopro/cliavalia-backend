@@ -5,10 +5,40 @@ type StrapiInstance = Core.Strapi;
 
 export type CategoryWithSector = {
   id: number;
+  documentId?: string;
   name?: string;
   slug?: string;
-  sector?: { id: number; name?: string } | number | null;
+  sector?: { id: number; documentId?: string; name?: string } | number | null;
 };
+
+/** Stable sector identity across Strapi i18n locale rows (prefer documentId). */
+export function getSectorIdentityKey(
+  sectorRef: CategoryWithSector['sector'],
+): string | null {
+  if (sectorRef == null) return null;
+  if (typeof sectorRef === 'object') {
+    const docId = sectorRef.documentId;
+    if (typeof docId === 'string' && docId.trim()) {
+      return `doc:${docId}`;
+    }
+    const id = Number(sectorRef.id);
+    return Number.isFinite(id) ? `id:${id}` : null;
+  }
+  const id = Number(sectorRef);
+  return Number.isFinite(id) ? `id:${id}` : null;
+}
+
+function getSectorNumericId(
+  sectorRef: CategoryWithSector['sector'],
+): number | null {
+  if (sectorRef == null) return null;
+  if (typeof sectorRef === 'object') {
+    const id = Number(sectorRef.id);
+    return Number.isFinite(id) ? id : null;
+  }
+  const id = Number(sectorRef);
+  return Number.isFinite(id) ? id : null;
+}
 
 export type ResolvedBusinessCategories = {
   categoryIds: number[];
@@ -125,34 +155,43 @@ export async function resolveCategoriesAndSector(
     return { categoryIds: [], categories: [], sectorId: null };
   }
 
-  const categories = (await strapi.db.query('api::category.category').findMany({
-    where: { id: { $in: uniqueIds } },
-    populate: { sector: { fields: ['id', 'name'] } },
+  // Document service (not db.query) so sector relations resolve to the same
+  // document identity across localized category/sector rows.
+  const rawCategories = (await strapi.documents('api::category.category').findMany({
+    filters: { id: { $in: uniqueIds } },
+    populate: { sector: true },
+    limit: uniqueIds.length,
   })) as CategoryWithSector[];
+
+  const byId = new Map(rawCategories.map((c) => [Number(c.id), c]));
+  const categories = uniqueIds
+    .map((id) => byId.get(id))
+    .filter((c): c is CategoryWithSector => c != null);
 
   if (categories.length !== uniqueIds.length) {
     throw new errors.ValidationError('One or more categories are invalid.');
   }
 
-  const sectorIds = new Set<number>();
+  const sectorKeys = new Set<string>();
+  let sectorId: number | null = null;
+
   for (const category of categories) {
-    const sectorRef = category.sector;
-    const sectorId =
-      typeof sectorRef === 'object' && sectorRef !== null
-        ? Number(sectorRef.id)
-        : Number(sectorRef);
-    if (Number.isFinite(sectorId)) {
-      sectorIds.add(sectorId);
+    const key = getSectorIdentityKey(category.sector);
+    if (key) {
+      sectorKeys.add(key);
+      if (sectorId == null) {
+        sectorId = getSectorNumericId(category.sector);
+      }
     }
   }
 
-  if (sectorIds.size === 0) {
+  if (sectorKeys.size === 0) {
     throw new errors.ValidationError(
       'Selected categories must belong to a sector.',
     );
   }
 
-  if (sectorIds.size > 1) {
+  if (sectorKeys.size > 1) {
     throw new errors.ValidationError(
       'All selected categories must belong to the same sector.',
     );
@@ -161,7 +200,7 @@ export async function resolveCategoriesAndSector(
   return {
     categoryIds: uniqueIds,
     categories,
-    sectorId: [...sectorIds][0] ?? null,
+    sectorId,
   };
 }
 
