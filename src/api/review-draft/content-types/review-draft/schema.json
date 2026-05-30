@@ -51,6 +51,24 @@
       "type": "string",
       "required": false,
       "maxLength": 50
+    },
+    "experiencePhotos": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "videos"
+      ]
+    },
+    "audioReview": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "audios",
+        "videos"
+      ]
     }
   }
 }

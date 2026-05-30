@@ -29,6 +29,8 @@ export default factories.createCoreController(
             },
             populate: {
               business: { fields: ['id', 'name'] },
+              experiencePhotos: true,
+              audioReview: true,
             },
           });
 
@@ -91,6 +93,8 @@ export default factories.createCoreController(
             data: body,
             populate: {
               business: { fields: ['id', 'name'] },
+              experiencePhotos: true,
+              audioReview: true,
             },
           });
 
